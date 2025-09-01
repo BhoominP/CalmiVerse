@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+firebase-admin
+python-dotenv
+
+# AI / NLP
+rasa
+transformers
+torch
+
+# Facial Expression Recognition
+fer
+opencv-python
+
+# Alerts
+twilio
+sendgrid
