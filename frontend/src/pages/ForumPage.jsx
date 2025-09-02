@@ -55,7 +55,7 @@ function ForumPage() {
       <div className="posts-list">
         {posts.map((post) => (
           <div key={post.id} className="post-card">
-            <div className="post-avatar">{post.id * 29}</div>
+            <div className="post-avatar">{post.id * 1}</div>
             <div className="post-content">
               <div className="post-header">
                 <strong>{post.student}</strong>

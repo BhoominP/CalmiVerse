@@ -29,6 +29,74 @@
   color: #2e2e2e;
 }
 
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: auto;
+  position: relative;
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.profile-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.profile-name {
+  font-weight: 600;
+  display: block;
+}
+
+.profile-role {
+  font-size: 12px;
+  color: gray;
+}
+
+.logout-btn {
+  background: #a5e9d8;
+  border: none;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-popup {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  background: #444;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.95;
+}
+
+.logout-popup:hover {
+  background: #222;       /* Darker background */
+  transform: translateY(-2px) scale(1.05); /* Slight lift & zoom */
+  opacity: 1;             /* Make it fully visible */
+}
+
+.logout-popup:hover {
+  background: #222;
+}
+
+
 /* Navigation */
 .menu {
   display: flex;

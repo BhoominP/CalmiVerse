@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Smile,
@@ -8,12 +8,16 @@ import {
   Calendar,
   AlertCircle,
   Settings,
+  LogOut,
 } from "lucide-react";
 import "../styles/components.css";
 import CalmiVerseLogo from "../assets/icons/CalmiVerse.svg";
 
 function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [showLogout, setShowLogout] = useState(false);
+  const profileRef = useRef(null);
 
   const menuItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
@@ -24,6 +28,22 @@ function Sidebar() {
     { name: "SOS", path: "/sos", icon: <AlertCircle size={18} /> },
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
   ];
+
+  // Close popup if clicked outside
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowLogout(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // clear session
+    navigate("/signin"); // redirect to signin
+  };
 
   return (
     <aside className="sidebar">
@@ -50,17 +70,31 @@ function Sidebar() {
         ))}
       </nav>
 
-      {/* === Profile Section === */}
-      <div className="sidebar-profile">
+      {/* === Profile Section with Logout === */}
+      <div className="sidebar-profile" ref={profileRef}>
         <img
-          src="https://i.pravatar.cc/40?img=12" // placeholder avatar
+          src="https://i.pravatar.cc/40?img=12"
           alt="User Avatar"
           className="profile-avatar"
         />
         <div className="profile-info">
-          <span className="profile-name">Student #123</span>
-          <span className="profile-role">University Student</span>
+          <span className="profile-name">Student #582</span>
+          <span className="profile-role">Uni Student</span>
         </div>
+
+        {/* Logout toggle button */}
+        <button
+          className="logout-btn"
+          onClick={() => setShowLogout(!showLogout)}
+        >
+          <LogOut size={20} />
+        </button>
+
+        {showLogout && (
+          <div className="logout-popup" onClick={handleLogout}>
+            Log out
+          </div>
+        )}
       </div>
     </aside>
   );
