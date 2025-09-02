@@ -4,10 +4,40 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+
+    <!-- Title -->
+    <title>CalmiVerse – Digital Mental Health Support</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@500;700&family=DM+Sans:wght@400;500&family=Manrope:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Global Styles (Optional: reset or theme variables) -->
+    <style>
+      :root {
+        --primary: #9c88ff;   /* Calm lavender */
+        --secondary: #00c9a7; /* Mint green */
+        --neutral-light: #f9fafb;
+        --neutral-dark: #2e2e2e;
+      }
+
+      body {
+        margin: 0;
+        font-family: "DM Sans", "Manrope", sans-serif;
+        background: var(--neutral-light);
+        color: var(--neutral-dark);
+      }
+
+      h1, h2, h3, h4, h5 {
+        font-family: "Poppins", "Inter", sans-serif;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+

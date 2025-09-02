@@ -1,0 +1,94 @@
+.resources-page {
+  padding: 2rem;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.resources-page h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #2e2e2e;
+}
+
+.resources-page p {
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.resource-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-4px);
+}
+
+.resource-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.resource-content {
+  padding: 1rem;
+  position: relative;
+}
+
+.resource-content h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #2e2e2e;
+}
+
+.resource-content p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+
+.badge-article { background: #e8ddff; color: #6c4fdd; }
+.badge-podcast { background: #d4f6ff; color: #0096c7; }
+.badge-video { background: #e6ffe6; color: #007f5f; }
+.badge-guide { background: #fff3e6; color: #e85d04; }
+
+.explore-link {
+  display: inline-block;
+  color: #9c88ff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.explore-link:hover {
+  text-decoration: underline;
+}
