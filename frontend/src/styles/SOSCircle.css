@@ -1,0 +1,134 @@
+.sos-container {
+  padding: 24px;
+}
+
+.sos-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.sos-subtitle {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.sos-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sos-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sos-heading {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sos-note {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.sos-section-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.sos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sos-contact {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.sos-contact-info {
+  display: flex;
+  gap: 20px;
+}
+
+.sos-contact-info label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.sos-contact-info input {
+  padding: 6px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  width: 180px;
+  font-size: 14px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #dc2626;
+}
+
+.divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.add-btn:hover {
+  background: #eef2ff;
+}
+
+/* New Contact Editable Card */
+.new-contact input {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  color: #111827;
+}
+
+.save-btn {
+  background: none;
+  border: none;
+  color: #00C9A7;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.save-btn:hover {
+  color: #059669;
+}

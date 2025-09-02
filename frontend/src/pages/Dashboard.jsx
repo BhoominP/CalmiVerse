@@ -62,7 +62,7 @@ function Dashboard() {
             <h2 className="card-title">
               <Flame className="icon-orange" /> Wellness Journey
             </h2>
-            <p className="points">5 Day Streak</p>
+            <p className="points">0 Day Streak</p>
           </div>
         </div>
       </div>

@@ -1,0 +1,118 @@
+.booking-container {
+  padding: 20px;
+}
+
+.booking-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.booking-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* === Grid Layout === */
+.counselor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* === Counselor Card === */
+.counselor-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.counselor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.counselor-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.counselor-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.counselor-title {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+/* Expertise Tag */
+.expertise-tag {
+  display: inline-block;
+  background: #ddd6fe;
+  color: #4c1d95;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* Availability */
+.availability {
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.availability-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.availability-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.availability-chip.video {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.availability-chip.text {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* Book Button */
+.book-btn {
+  background: #a78bfa;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.book-btn:hover {
+  background: #8b5cf6;
+}

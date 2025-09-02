@@ -17,10 +17,10 @@ function Sidebar() {
 
   const menuItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
-    { name: "Mood Mirror", path: "/mood-mirror", icon: <Smile size={18} /> },
     { name: "Resources", path: "/resources", icon: <BookOpen size={18} /> },
     { name: "Forum", path: "/forum", icon: <MessageSquare size={18} /> },
-    { name: "Consolation", path: "/booking", icon: <Calendar size={18} /> },
+    { name: "Mood Mirror", path: "/mood-mirror", icon: <Smile size={18} /> },
+    { name: "Booking", path: "/booking", icon: <Calendar size={18} /> },
     { name: "SOS", path: "/sos", icon: <AlertCircle size={18} /> },
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
   ];
