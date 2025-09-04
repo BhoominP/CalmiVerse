@@ -1,66 +1,174 @@
-import React, { useState } from "react";
-import { Upload } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Upload, X, Sparkles, Activity } from "lucide-react";
 import "../styles/MoodMirror.css";
 
 function MoodMirror() {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [analysis, setAnalysis] = useState("Your analysis will appear here.");
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  // Handle file selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
+      setSelectedImageFile(file);
       setSelectedImage(URL.createObjectURL(file));
-      setAnalysis("Processing image... 🤖");
-      // Simulated AI response
-      setTimeout(() => {
-        setAnalysis("AI detected: 😊 You seem happy today!");
-      }, 2000);
+      setAnalysis(null); // Clear previous analysis
     }
   };
 
+  // Trigger file picker
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // Cancel image selection
+  const handleCancelImage = () => {
+    setSelectedImage(null);
+    setSelectedImageFile(null);
+    setAnalysis(null);
+    fileInputRef.current.value = ""; // Reset file input
+  };
+
+  // Call backend API
+  const handleAnalyze = async () => {
+    if (!selectedImageFile) return;
+    setIsLoading(true);
+    setAnalysis(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedImageFile);
+
+      const res = await fetch("http://localhost:8000/mood/analyze-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.result) {
+        const lines = data.result.split("\n").filter(Boolean);
+        setAnalysis({
+          mood: lines[0] || "Unknown 🤔",
+          activities: lines.slice(1).length
+            ? lines.slice(1)
+            : ["No suggestions available."],
+        });
+      } else {
+        setAnalysis({
+          mood: "Unknown 🤔",
+          activities: ["Try again later."],
+        });
+      }
+    } catch (error) {
+      setAnalysis({
+        mood: "Error ❌",
+        activities: ["Could not connect to backend."],
+      });
+    }
+
+    setIsLoading(false);
+  };
+
   return (
-    <div className="moodmirror-container">
-      <h1 className="moodmirror-title">AI Mood Mirror</h1>
-      <p className="moodmirror-subtitle">
+    <div className="mood-mirror-container">
+      <h1 className="mood-mirror-title">AI Mood Mirror</h1>
+      <p className="mood-mirror-subtitle">
         Upload a selfie to get a reflection of your current mood and personalized suggestions.
       </p>
 
-      <div className="moodmirror-grid">
+      <div className="mood-mirror-grid">
         {/* Upload Card */}
-        <div className="moodmirror-card">
-          <h2>1. Upload Your Selfie</h2>
-          <p className="moodmirror-note">
+        <div className="mood-mirror-card">
+          <h2>1. Upload a Photo</h2>
+          <p className="mood-mirror-note">
             Your image is processed for analysis and is not stored on our servers.
           </p>
-          <label htmlFor="file-upload" className="upload-box">
+          <div className="upload-section">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+              accept="image/*"
+            />
             {selectedImage ? (
-              <img src={selectedImage} alt="preview" className="preview-image" />
+              <div className="image-preview-container">
+                <img
+                  src={selectedImage}
+                  alt="Selfie preview"
+                  className="image-preview"
+                />
+                <button onClick={handleCancelImage} className="cancel-button">
+                  <X size={20} />
+                </button>
+              </div>
             ) : (
-              <div className="upload-placeholder">
-                <Upload size={32} />
-                <span>Click to upload an image</span>
-                <small>or drag and drop</small>
+              <div className="upload-placeholder" onClick={handleUploadClick}>
+                <div className="upload-icon-container">
+                  <Upload size={40} />
+                </div>
+                <button className="upload-button-placeholder">
+                  Upload Photo
+                </button>
               </div>
             )}
-            <input
-              id="file-upload"
-              type="file"
-              accept="image/*"
-              className="hidden-input"
-              onChange={handleImageUpload}
-            />
-          </label>
-          <button className="analyze-btn" disabled={!selectedImage}>
-            ⚡ Analyze Mood
+          </div>
+
+          <button
+            className="analyze-mood-button"
+            onClick={handleAnalyze}
+            disabled={!selectedImage || isLoading}
+          >
+            {isLoading ? (
+              "Analyzing..."
+            ) : (
+              <>
+                <Sparkles size={20} style={{ marginRight: "8px" }} /> Analyze Mood
+              </>
+            )}
           </button>
         </div>
-
         {/* Analysis Card */}
-        <div className="moodmirror-card">
-          <h2>2. Mood Analysis</h2>
-          <p className="moodmirror-note">Here’s what the AI detected.</p>
-          <p className="analysis-text">{analysis}</p>
+<div className="mood-mirror-card">
+  <h2>2. Mood Analysis</h2>
+  <p className="mood-mirror-note">Here's what the AI detected.</p>
+
+  <div className="analysis-section">
+    {isLoading ? (
+      <p>⏳ Analyzing...</p>
+    ) : analysis ? (
+      <div>
+        <div className="detected-mood">
+          <div className="detected-mood-title-container">
+            <Sparkles size={20} />
+            <h3 className="detected-mood-title">Detected Mood</h3>
+          </div>
+          <span className="mood-tag">{analysis.mood}</span>
         </div>
+        <div className="suggested-activities">
+          <div className="suggested-activities-title-container">
+            <Activity size={20} />
+            <h3 className="suggested-activities-title">Suggested Activities</h3>
+          </div>
+          <ul>
+            {analysis.activities.map((activity, index) => (
+              <li key={index}>{activity}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ) : null}
+
+    {!isLoading && !analysis && (
+      <p className="placeholder-text">Your analysis will appear here.</p>
+    )}
+  </div>
+</div>
+
       </div>
     </div>
   );

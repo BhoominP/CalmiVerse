@@ -61,40 +61,33 @@
   color: gray;
 }
 
-.logout-btn {
-  background: #a5e9d8;
-  border: none;
-  border-radius: 8px;
-  padding: 6px;
-  cursor: pointer;
+/* Sign Out Button */
+.signout-section {
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+
+.signout-btn {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.logout-popup {
-  position: absolute;
-  bottom: 50px;
-  right: 10px;
-  background: #444;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #6b7280;
   font-size: 14px;
+  font-weight: 500;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  opacity: 0.95;
+  transition: background 0.2s, color 0.2s;
 }
 
-.logout-popup:hover {
-  background: #222;       /* Darker background */
-  transform: translateY(-2px) scale(1.05); /* Slight lift & zoom */
-  opacity: 1;             /* Make it fully visible */
+.signout-btn:hover {
+  background: #f3f4f6;
+  color: #ef4444;
 }
 
-.logout-popup:hover {
-  background: #222;
-}
 
 
 /* Navigation */

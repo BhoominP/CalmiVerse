@@ -1,138 +1,156 @@
-/* General container */
+/* === General Auth Page Styles === */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f9fafb;
+  background: #f8f9fa;
+  padding: 20px;
 }
 
-/* Card */
 .auth-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 380px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-.auth-card h2 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #2e2e2e;
-}
-
-.auth-card p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-/* Social buttons */
-.social-btn {
-  width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
   background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 400px;
+  width: 100%;
+}
+
+.auth-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* === Google Button === */
+.google-btn {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
 }
 
-.social-btn.google { color: #db4437; }
-.social-btn.twitter { color: #1da1f2; }
+.google-btn:hover {
+  background: #f3f4f6;
+}
 
-/* Divider */
+/* === Divider === */
 .divider {
-  margin: 1rem 0;
-  font-size: 12px;
-  color: #777;
+  display: flex;
+  align-items: center;
   text-align: center;
-  position: relative;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  margin: 1.5rem 0;   /* spacing around */
+  border: none;       /* removes any unwanted line above */
 }
+
 .divider::before,
 .divider::after {
   content: "";
+  flex: 1;
   height: 1px;
-  width: 40%;
-  background: #ddd;
-  position: absolute;
-  top: 50%;
+  background: #e5e7eb;  /* light gray line */
 }
-.divider::before { left: 0; }
-.divider::after { right: 0; }
 
-/* Form */
-.auth-form {
+.divider:not(:empty)::before {
+  margin-right: 0.75em;
+}
+.divider:not(:empty)::after {
+  margin-left: 0.75em;
+}
+
+/* === Form === */
+form {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 15px;
 }
 
-.auth-form label {
+label {
   font-size: 14px;
-  text-align: left;
   font-weight: 500;
+  color: #374151;
 }
 
-.auth-form input {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+input {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
   outline: none;
+  transition: border 0.2s ease;
 }
 
-/* Checkbox */
-.checkbox {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
+input:focus {
+  border-color: #7c3aed;
+}
+
+/* === Submit Button === */
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #6d28d9;
+}
+
+/* === Switch Auth Links === */
+.switch-auth {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #4b5563;
+  text-align: center;
+}
+
+.switch-auth a {
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.switch-auth a:hover {
+  text-decoration: underline;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 12px;
   color: #555;
 }
 
-.checkbox input {
-  margin-right: 6px;
-}
-
-.checkbox a {
-  color: #9c88ff;
-  text-decoration: none;
-}
-
-/* Forgot */
-.forgot {
-  text-align: right;
-  font-size: 12px;
-}
-.forgot a {
-  color: #9c88ff;
-  text-decoration: none;
-}
-
-/* Buttons */
-.primary-btn {
-  background: #9c88ff;
-  color: white;
-  padding: 0.7rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  margin-top: 1rem;
-}
-.primary-btn:hover {
-  background: #7f6de9;
-}
-
-/* Footer */
-.auth-footer {
-  margin-top: 1rem;
-  font-size: 14px;
-}
 .auth-footer a {
-  color: #9c88ff;
+  color: #6a4feb;   /* violet accent */
   text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
 }

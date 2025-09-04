@@ -1,0 +1,226 @@
+/* === Global === */
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8f9fa;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+/* === Container & Header === */
+.dashboard-container {
+  padding: 2rem 4rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #111827;
+}
+
+.dashboard-header p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+}
+
+/* === Layout === */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* === Card Styling === */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  color: #4f46e5;
+  margin: 0 0 1.25rem 0;
+}
+
+.title-icon {
+  margin-right: 0.5rem;
+  color: #6366f1;
+}
+
+/* === Snapshot === */
+.wellbeing-snapshot .snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.snapshot-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.8rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* === Badges === */
+.mood-tag,
+.stress-tag,
+.anxiety-tag,
+.hobby-tag,
+.challenge-tag,
+.sos-tag,
+.support-tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.mood-tag {
+  background-color: #e0e7ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+}
+.stress-tag.high {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+.anxiety-tag.low {
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+.hobby-tag {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+.challenge-tag {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+.sos-tag {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+.support-tag {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+/* === Suggestions === */
+.suggestions-section {
+  margin-top: 1.25rem;
+}
+
+.suggestions-section .section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #374151;
+}
+
+.suggestion-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.suggestion-buttons button {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.suggestion-buttons button:hover {
+  background: #eef2ff;
+  color: #4338ca;
+  border-color: #c7d2fe;
+  transform: translateY(-1px);
+}
+
+/* === Points === */
+.points-total {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.tasks-message {
+  margin-top: 0.8rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+/* === Chat Section === */
+.chat-input textarea {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.8rem;
+  resize: none;
+  font-size: 0.9rem;
+  min-height: 50px;
+  background: #f9fafb;
+  outline: none; /* 👈 removes black outline */
+  box-shadow: none; /* 👈 removes blue validation glow */
+}
+
+.chat-input textarea:focus {
+  border-color: #8b5cf6; /* purple focus border */
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); /* subtle glow */
+}
+
+.send-button {
+  background: linear-gradient(90deg, #8b5cf6, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.send-button:hover {
+  background: linear-gradient(90deg, #7c3aed, #4f46e5);
+  transform: translateY(-1px);
+}

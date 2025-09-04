@@ -1,18 +1,117 @@
-/* Global reset and base */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--background);
-  color: var(--text-primary);
+.forum-container {
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+.forum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+.forum-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.forum-subtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.create-post-btn {
+  background-color: #8b5cf6;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.create-post-btn:hover {
+  background-color: #7c3aed;
+}
+
+.guidelines-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
   padding: 1rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.guidelines-icon {
+  color: #6b7280;
+  margin-right: 1rem;
+}
+
+.guidelines-text {
+    color: #6b7280;
+}
+
+.posts-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.post-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.post-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #4b5563;
+    margin-right: 1rem;
+}
+
+.post-time {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.post-text {
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: #6b7280;
+}
+
+.post-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.post-action:hover {
+    color: #4f46e5;
 }

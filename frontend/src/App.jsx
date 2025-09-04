@@ -10,15 +10,18 @@ import Settings from "./pages/Settings";
 import MoodMirror from "./components/MoodMirror";
 import ResourceDetail from "./pages/ResourceDetail";
 
-// Sign in/up
+// Auth + Screening
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Screening from "./pages/Screening"; // <- Combined steps
 
 function AppLayout() {
   const location = useLocation();
 
-  // Hide sidebar for auth pages
-  const hideSidebar = ["/signin", "/signup"].includes(location.pathname);
+  // Hide sidebar on signin, signup, screening
+  const hideSidebar = ["/signin", "/signup", "/screening"].some(path =>
+    location.pathname.startsWith(path)
+  );
 
   return (
     <div className="app-layout">
@@ -26,11 +29,14 @@ function AppLayout() {
 
       <main className="app-content">
         <Routes>
-          {/* Public Routes */}
+          {/* Auth */}
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
 
-          {/* Protected/Main Routes */}
+          {/* Screening (Step 1 → Step 7) */}
+          <Route path="/screening" element={<Screening />} />
+
+          {/* Main App */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/resources/:id" element={<ResourceDetail />} />

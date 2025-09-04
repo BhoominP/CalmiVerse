@@ -1,0 +1,536 @@
+/* === Screening Page Styles === */
+.screening-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background: #f7f9fb;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.logo-only img {
+  height: 60px;
+  margin-bottom: 25px;
+}
+
+.progress-bar {
+  width: 90%;
+  height: 10px;
+  border-radius: 6px;
+  background: #eaeaea;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #9a6bff, #71e4d6);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.screening-card {
+  background: #fff;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 800px;
+}
+
+.screening-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.screening-card p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Input fields */
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 15px;
+  background: #fafafa;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Grid layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.radio-grid {
+  display: grid;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.slider-group {
+  margin: 25px 0;
+}
+
+.slider-group input[type="range"] {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.next-btn,
+.back-btn {
+  background: #9a6bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-btn {
+  background: #ddd;
+  color: #333;
+}
+
+.next-btn:hover {
+  background: #7c4dff;
+}
+
+.back-btn:hover {
+  background: #bbb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-grid,
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Step 3: Psychology & Behavior === */
+.question-block {
+  margin-bottom: 2rem;
+}
+
+.question-block .form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #333;
+  font-size: 1rem;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Custom radio styling */
+.radio-options label {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+}
+
+.radio-options input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #c5aefb;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.radio-options input[type="radio"]:checked {
+  border-color: #8a5cf5;
+  background-color: #8a5cf5;
+}
+
+.radio-options input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Consistent Back + Next buttons */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.back-btn {
+  background: #f7f8fc;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  color: #333;
+}
+
+.back-btn:hover {
+  background: #eceef5;
+}
+
+.next-btn {
+  background: #9b7df5;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.next-btn:hover {
+  background: #7d61e9;
+}
+
+
+/* === Step 4 Layout === */
+.mood-mirror-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Left + Right Boxes */
+.selfie-box, .analysis-box {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 300px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.selfie-box h3,
+.analysis-box h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #111827;
+}
+
+.selfie-box p,
+.analysis-box p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+/* Camera placeholder / preview */
+.camera-placeholder, .preview-box, .analysis-result {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #6b7280;
+  background: #fafafa;
+}
+
+.camera-placeholder video {
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.captured-photo {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn-primary {
+  background: #8b5cf6;
+  color: #fff;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  color: #374151;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  margin-top: 0.5rem;
+  transition: background 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Info box above */
+.info-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.info-box span {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.detected-mood {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to right, #eef2ff, #e0e7ff);
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.08);
+}
+
+.detected-mood .label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4338ca;
+}
+
+.mood-tag {
+  background: #4f46e5;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px; /* pill look */
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 5px rgba(79, 70, 229, 0.2);
+}
+
+.suggestions {
+  margin-top: 1rem;
+  text-align: left; /* ensures text is left aligned */
+}
+
+.suggestions h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.suggestions ul {
+  list-style: disc;            
+  list-style-position: inside; 
+  padding-left: 1rem;          
+  margin: 0;
+}
+
+.suggestions li {
+  padding: 0.4rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #374151;
+  text-align: left;
+}
+
+/*step:4*/
+/* Dropdown base */
+.sos-box select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  font-size: 0.95rem;
+  color: #111827;
+  appearance: none; /* remove native arrow */
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+/* Custom arrow */
+.sos-box {
+  position: relative;
+}
+.sos-box::after {
+  content: "▾";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+/* Fix blue selection issue */
+.sos-box select option {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: white;
+  color: #111827;
+  padding: 0.75rem 1rem;
+}
+
+/* Hover + selected option = green only */
+.sos-box select option:hover {
+  background-color: #14b8a6 !important;
+  color: white !important;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between; /* left vs right side */
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.actions-right {
+  display: flex;
+  gap: 1rem; /* spacing between Skip + Next */
+}
+
+
+/* Step:6 */
+
+.review-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.review-box h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.review-box p, .review-box li {
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+/* === Step 7: Finish Setup (Congratulations) === */
+.finish-setup {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.finish-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.finish-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.finish-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.finish-quote {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #777;
+  margin-bottom: 2rem;
+}
+
+.finish-btn {
+  display: inline-block;
+  padding: 0.9rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background-color: #9b7df5; /* purple like your screenshot */
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.finish-btn:hover {
+  background-color: #8663e9; /* darker purple */
+}

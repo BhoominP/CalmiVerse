@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -16,7 +16,6 @@ import CalmiVerseLogo from "../assets/icons/CalmiVerse.svg";
 function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showLogout, setShowLogout] = useState(false);
   const profileRef = useRef(null);
 
   const menuItems = [
@@ -28,17 +27,6 @@ function Sidebar() {
     { name: "SOS", path: "/sos", icon: <AlertCircle size={18} /> },
     { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
   ];
-
-  // Close popup if clicked outside
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setShowLogout(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user"); // clear session
@@ -70,7 +58,14 @@ function Sidebar() {
         ))}
       </nav>
 
-      {/* === Profile Section with Logout === */}
+      {/* === Sign Out Above Avatar === */}
+      <div className="signout-section">
+        <button className="signout-btn" onClick={handleLogout}>
+          <LogOut size={18} /> <span>Sign Out</span>
+        </button>
+      </div>
+
+      {/* === Profile Section === */}
       <div className="sidebar-profile" ref={profileRef}>
         <img
           src="https://i.pravatar.cc/40?img=12"
@@ -81,20 +76,6 @@ function Sidebar() {
           <span className="profile-name">Student #582</span>
           <span className="profile-role">Uni Student</span>
         </div>
-
-        {/* Logout toggle button */}
-        <button
-          className="logout-btn"
-          onClick={() => setShowLogout(!showLogout)}
-        >
-          <LogOut size={20} />
-        </button>
-
-        {showLogout && (
-          <div className="logout-popup" onClick={handleLogout}>
-            Log out
-          </div>
-        )}
       </div>
     </aside>
   );
