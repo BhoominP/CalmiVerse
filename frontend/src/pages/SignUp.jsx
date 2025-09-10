@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/auth.css"; // keep this for signup styling
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../firebase"; // ✅ Firebase config
+import "../styles/auth.css";
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // === Email/Password Sign Up ===
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -17,10 +23,31 @@ function Signup() {
       return;
     }
 
-    console.log("Signup with:", { email, password });
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("✅ User created with email:", email);
 
-    // ✅ After signup success → go to screening flow
-    navigate("/screening");
+      navigate("/screening"); // go to screening flow
+    } catch (error) {
+      console.error("❌ Signup error:", error.message);
+      alert(error.message);
+    }
+  };
+
+  // === Google Sign Up ===
+  const handleGoogleSignup = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider); // 🚀 opens account picker
+      const user = result.user;
+
+      console.log("✅ Google signup success:", user.email);
+
+      navigate("/screening"); // go to screening flow
+    } catch (error) {
+      console.error("❌ Google signup error:", error.message);
+      alert(error.message);
+    }
   };
 
   return (
@@ -29,7 +56,11 @@ function Signup() {
         <h2 className="auth-title">Sign Up</h2>
         <p className="auth-subtitle">Enter your information to create an account.</p>
 
-        <button className="google-btn">🔑 Sign up with Google</button>
+        {/* Google Sign Up */}
+        <button className="google-btn" onClick={handleGoogleSignup}>
+          🔑 Sign up with Google
+        </button>
+
         <div className="divider">OR CONTINUE WITH</div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -60,7 +91,6 @@ function Signup() {
             required
           />
 
-          {/* Submit triggers handleSubmit → navigates to /screening */}
           <button type="submit" className="submit-btn">Sign up</button>
         </form>
 

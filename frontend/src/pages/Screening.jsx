@@ -33,11 +33,6 @@ const [analysis, setAnalysis] = useState(null);
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleFinish = () => {
-    // ✅ Here you can send all collected data + AI analysis to backend
-    navigate("/"); // Redirect to dashboard
-  };
-
   // === Webcam Controls ===
   const startCamera = async () => {
     try {
@@ -76,6 +71,55 @@ const removeSOSContact = (index) => {
   const updated = sosContacts.filter((_, i) => i !== index);
   setSosContacts(updated);
 };
+
+///results
+
+const result = {
+  name: basicDetails.name,
+  course: basicDetails.course,
+  year: basicDetails.age,
+  hobbies: basicDetails.hobbies,
+  description: basicDetails.description,
+  challenges,
+  sleepHours,
+  mood: analysis?.mood || "Not analyzed",
+  moodSuggestions: analysis?.suggestions || [],
+  sosContacts,
+  overall: "Moderate Stress", // ✅ backend could also calculate this
+  timestamp: new Date().toISOString(),
+};
+
+
+const handleFinish = async () => {
+  const result = {
+    name: basicDetails.name,
+    course: basicDetails.course,
+    year: basicDetails.age,
+    hobbies: basicDetails.hobbies,
+    description: basicDetails.description,
+    challenges,
+    sleepHours,
+    mood: analysis?.mood || "Not analyzed",
+    moodSuggestions: analysis?.suggestions || [],
+    sosContacts,
+    overall: "Moderate Stress", // placeholder
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    await fetch("http://localhost:8000/api/screening/save", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(result),
+});
+
+    navigate("/"); // Dashboard
+  } catch (err) {
+    console.error("Error saving result:", err);
+  }
+};
+
+
 
 
 

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../firebase"; // ✅ Firebase config
 import "../styles/auth.css";
 
 function Signin() {
@@ -7,15 +13,35 @@ function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  // === Email/Password Login ===
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // For now just a mock authentication
-    if (email && password) {
-      // ✅ After successful login redirect to dashboard
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("✅ Logged in:", userCredential.user.email);
+
+      // redirect to dashboard
       navigate("/");
-    } else {
-      alert("Please enter email and password!");
+    } catch (error) {
+      console.error("❌ Login error:", error.message);
+      alert(error.message);
+    }
+  };
+
+  // === Google Login ===
+  const handleGoogleSignin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider); // 🚀 opens account picker
+      const user = result.user;
+
+      console.log("✅ Google login success:", user.email);
+
+      navigate("/"); // redirect to dashboard
+    } catch (error) {
+      console.error("❌ Google login error:", error.message);
+      alert(error.message);
     }
   };
 
@@ -25,7 +51,10 @@ function Signin() {
         <h2 className="auth-title">Login</h2>
         <p className="auth-subtitle">Enter your email below to login to your account.</p>
 
-        <button className="google-btn">Login with Google</button>
+        {/* Google Login */}
+        <button className="google-btn" onClick={handleGoogleSignin}>
+          🔑 Login with Google
+        </button>
 
         <div className="divider">OR CONTINUE WITH</div>
 
