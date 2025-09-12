@@ -1,12 +1,13 @@
 /* === Global === */
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: #f8f9fa;
   color: #1f2937;
   line-height: 1.6;
 }
 
-/* === Container & Header === */
+/* === Dashboard Container & Header === */
 .dashboard-container {
   padding: 2rem 4rem;
   max-width: 1280px;
@@ -26,7 +27,7 @@ body {
   margin-top: 0.3rem;
 }
 
-/* === Layout === */
+/* === Layout Grid === */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -41,17 +42,25 @@ body {
   gap: 1.5rem;
 }
 
-/* === Card Styling === */
-.card {
+
+
+/* === Card (Common Style) === */
+.card,
+.firstaid-card {
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   padding: 1.5rem;
+  flex: 0.8; /* take all remaining height */
+  min-height: 200px; /* optional: ensure it's taller even with no chat */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
   transition: box-shadow 0.2s ease;
 }
 
-.card:hover {
+.card:hover,
+.firstaid-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -61,7 +70,7 @@ body {
   display: flex;
   align-items: center;
   color: #4f46e5;
-  margin: 0 0 1.25rem 0;
+  margin: 0 0 1rem 0;
 }
 
 .title-icon {
@@ -69,113 +78,196 @@ body {
   color: #6366f1;
 }
 
-/* === Snapshot === */
-.wellbeing-snapshot .snapshot-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+/* ================================
+   📊 Wellbeing Snapshot
+   ================================ */
+/* Snapshot Card */
+.wellbeing-card {
+  background: #fff;
+  padding: 1.8rem;             /* slightly more breathing room */
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  font-family: "Inter", sans-serif;
 }
 
-.snapshot-item {
+/* Header (Hi + Mood/Status on right) */
+.snapshot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;         /* vertical alignment */
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;       /* more space from body */
+}
+
+/* User info block */
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;                 /* compact spacing between lines */
+}
+
+/* Right status block */
+.status-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: right;
+  min-width: 200px;
+}
+
+.status-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.95rem;
-  padding: 0.6rem 0.8rem;
-  background: #f9fafb;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  font-size: 0.9rem;
 }
 
-/* === Badges === */
-.mood-tag,
-.stress-tag,
-.anxiety-tag,
-.hobby-tag,
-.challenge-tag,
-.sos-tag,
-.support-tag {
-  padding: 3px 8px;
-  border-radius: 6px;
+/* Body Grid (Challenges + Support) */
+.snapshot-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;                   /* more space between left & right */
+  margin: 1.5rem 0;
+  align-items: start;
+}
+
+.snapshot-body h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+/* Pills */
+.pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.pill {
+  background: #e5f3f5;
+  color: #0a6c74;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
   font-size: 0.8rem;
   font-weight: 500;
+}
+
+.pill.challenge {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+/* Suggestions */
+.suggestions {
+  margin-top: 1.5rem;
+}
+
+.suggestion-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.btn {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+  background: #f3f4f6;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+
+/* Last updated */
+.last-updated {
+  margin-top: 0.8rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Mood badges */
+.mood-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.85rem;
   display: inline-block;
-  text-transform: capitalize;
 }
 
-.mood-tag {
-  background-color: #e0e7ff;
-  color: #4338ca;
-  border: 1px solid #c7d2fe;
+.mood-badge.happy {
+  background: #dcfce7;
+  color: #166534;
 }
-.stress-tag.high {
-  background-color: #fee2e2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+.mood-badge.relaxed {
+  background: #dbeafe;
+  color: #1e3a8a;
 }
-.anxiety-tag.low {
-  background-color: #dcfce7;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
+.mood-badge.calm {
+  background: #f0fdf4;
+  color: #14532d;
 }
-.hobby-tag {
-  background-color: #e0f2fe;
-  color: #0369a1;
+.mood-badge.stressed {
+  background: #fee2e2;
+  color: #991b1b;
 }
-.challenge-tag {
-  background-color: #ede9fe;
-  color: #7c3aed;
+.mood-badge.anxious {
+  background: #fef9c3;
+  color: #854d0e;
 }
-.sos-tag {
-  background-color: #f1f5f9;
-  color: #475569;
+.mood-badge.sad {
+  background: #ede9fe;
+  color: #4c1d95;
 }
-.support-tag {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-/* === Suggestions === */
-.suggestions-section {
-  margin-top: 1.25rem;
-}
-
-.suggestions-section .section-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
+.mood-badge.neutral {
+  background: #f3f4f6;
   color: #374151;
 }
 
-.suggestion-buttons {
+/* ================================
+   ⚡ Points & Tasks
+   ================================ */
+.points-section {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.suggestion-buttons button {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 0.5rem 0.9rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
+.points-info {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  transition: all 0.2s ease;
 }
 
-.suggestion-buttons button:hover {
-  background: #eef2ff;
-  color: #4338ca;
-  border-color: #c7d2fe;
-  transform: translateY(-1px);
+.points-icon {
+  color: #facc15;
 }
 
-/* === Points === */
+.points-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 .points-total {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #4f46e5;
 }
@@ -185,28 +277,94 @@ body {
   color: #6b7280;
   font-size: 0.9rem;
 }
-/* === Chat Section === */
+
+/* ================================
+   🤖 AI-Guided First Aid
+   ================================ */
+.firstaid-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #4f46e5;
+}
+
+.firstaid-subtext {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Chat Area */
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: #e0f2fe;
+  color: #075985;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.ai {
+  align-self: flex-start;
+  background: #f3f4f6;
+  color: #374151;
+  border-bottom-left-radius: 4px;
+}
+
+/* Chat input row */
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .chat-input textarea {
   flex: 1;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 0.8rem;
+  padding: 0.75rem 1rem;
   resize: none;
   font-size: 0.9rem;
-  min-height: 50px;
+  min-height: 45px;
   background: #f9fafb;
-  outline: none; /* 👈 removes black outline */
-  box-shadow: none; /* 👈 removes blue validation glow */
+  outline: none;
 }
 
 .chat-input textarea:focus {
-  border-color: #8b5cf6; /* purple focus border */
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); /* subtle glow */
+  border-color: #8b5cf6;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
 .send-button {
-  background: linear-gradient(90deg, #8b5cf6, #6366f1);
+  background: #a78bfa;
   color: white;
   border: none;
   border-radius: 8px;
@@ -215,12 +373,18 @@ body {
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
 
 .send-button:hover {
-  background: linear-gradient(90deg, #7c3aed, #4f46e5);
+  background: #7c3aed;
   transform: translateY(-1px);
+}
+
+.send-button:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
 }

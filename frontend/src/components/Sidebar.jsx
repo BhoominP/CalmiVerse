@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -12,11 +12,38 @@ import {
 } from "lucide-react";
 import "../styles/components.css";
 import CalmiVerseLogo from "../assets/icons/CalmiVerse.svg";
+import defaultAvatar from "../assets/calmiverse-avatar.png";
 
 function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const profileRef = useRef(null);
+
+  // 🔑 Local state for user
+  const [user, setUser] = useState({
+  displayName: "Student",
+  status: "University Student",
+  profilePic: defaultAvatar
+});
+
+useEffect(() => {
+  const loadUser = () => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setUser({
+        displayName: parsedUser.displayName || "Student",
+        status: parsedUser.status || "University Student",
+        profilePic: parsedUser.profilePic || defaultAvatar
+      });
+    }
+  };
+
+  loadUser();
+  window.addEventListener("userUpdated", loadUser);
+  return () => window.removeEventListener("userUpdated", loadUser);
+}, []);
+
 
   const menuItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
@@ -65,18 +92,20 @@ function Sidebar() {
         </button>
       </div>
 
-      {/* === Profile Section === */}
-      <div className="sidebar-profile" ref={profileRef}>
-        <img
-          src="https://i.pravatar.cc/40?img=12"
-          alt="User Avatar"
-          className="profile-avatar"
-        />
-        <div className="profile-info">
-          <span className="profile-name">Student #582</span>
-          <span className="profile-role">Uni Student</span>
+      {/* === Profile Section (clickable) === */}
+      <Link to="/settings" className="sidebar-profile-link">
+        <div className="sidebar-profile" ref={profileRef}>
+          <img
+            src={user.profilePic || defaultAvatar}
+            alt="User Avatar"
+            className="profile-avatar"
+          />
+          <div className="profile-info">
+            <span className="profile-name">{user.displayName}</span>
+            <span className="profile-role">{user.status}</span>
+          </div>
         </div>
-      </div>
+      </Link>
     </aside>
   );
 }

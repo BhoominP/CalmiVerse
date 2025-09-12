@@ -1,16 +1,21 @@
-/* Theme variables for light & dark mode */
-:root {
-  --background: #f9fafb;
-  --sidebar-bg: #1f2937;
-  --text-primary: #111827;
+[data-theme='light'] {
+  --background-primary: #ffffff;
+  --background-secondary: #f3f4f6;
+  --text-primary: #1f2937;
   --text-secondary: #6b7280;
-  --accent: #6366f1;
+  --accent-primary: #9B7DF5;
+  --accent-secondary: #10b981;
+  --border-primary: #e5e7eb;
+  --card-background: #ffffff;
 }
 
-.dark {
-  --background: #111827;
-  --sidebar-bg: #1f2937;
-  --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
-  --accent: #818cf8;
+[data-theme='dark'] {
+  --background-primary: #1C1C1E;
+  --background-secondary: #2C2C2E;
+  --text-primary: #F0F0F0;
+  --text-secondary: #A0A0A0;
+  --accent-primary: #9B7DF5;
+  --accent-secondary: #34D399;
+  --border-primary: #383838;
+  --card-background: #2C2C2E;
 }

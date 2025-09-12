@@ -4,15 +4,21 @@ import "../styles/Dashboard.css";
 
 export default function AIFirstAid() {
   return (
-    <div className="card ai-first-aid">
-      <h2 className="card-title">
+    <div className="firstaid-card">
+      <h2 className="firstaid-title">
         <Sparkles className="title-icon" /> AI-Guided First Aid
       </h2>
-      <p>Feeling overwhelmed? Share what's on your mind. I'm here to help.</p>
+      <p className="firstaid-subtext">
+        Feeling overwhelmed? Share what's on your mind. I'm here to help.
+      </p>
 
       <div className="chat-container">
         <div className="chat-messages">
-          {/* Chat messages go here */}
+          {/* Example bubbles */}
+          <div className="chat-bubble user">I feel anxious about exams...</div>
+          <div className="chat-bubble ai">
+            That’s understandable. Would you like some calming exercises?
+          </div>
         </div>
         <div className="chat-input">
           <textarea placeholder="For example: 'I feel anxious about my exams...'" />

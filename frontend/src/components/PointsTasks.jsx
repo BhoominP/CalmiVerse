@@ -13,7 +13,9 @@ export default function PointsTasks() {
         </div>
         <span className="points-total">0</span>
       </div>
-      <p className="tasks-message">No new tasks right now. Try the AI First Aid if you need support.</p>
+      <p className="tasks-message">
+        No new tasks right now. Try the AI First Aid if you need support.
+      </p>
     </div>
   );
 }

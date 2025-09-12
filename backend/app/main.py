@@ -5,14 +5,23 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 from app.routes import mood  # your mood router
+from app.services import mood_service
+
 from app.routes import screening  # import your file
+from app.db import Base, engine
+from app.models import User, ScreeningResult
+
+
+# Create tables if not exist
+Base.metadata.create_all(bind=engine)
+
 
 # FastAPI app
 app = FastAPI(title="AI Backend with FastAPI")
 
 # Load environment variables
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))  # ✅ correct env usage
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))  # ✅ correct env usage
 
 # Enable CORS for frontend
 origins = [
@@ -28,8 +37,9 @@ app.add_middleware(
 )
 
 # Include mood router
+app.include_router(mood_service.router, prefix="/mood-service", tags=["Mood Mirror"])
 app.include_router(mood.router, prefix="/mood", tags=["Mood"])
-app.include_router(screening.router, prefix="/api", tags=["Screening"])
+app.include_router(screening.router)
 
 
 # Schema for prompt requests

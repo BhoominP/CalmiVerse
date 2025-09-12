@@ -32,46 +32,47 @@ function MoodMirror() {
     fileInputRef.current.value = ""; // Reset file input
   };
 
+
   // Call backend API
-  const handleAnalyze = async () => {
-    if (!selectedImageFile) return;
-    setIsLoading(true);
-    setAnalysis(null);
+const handleAnalyze = async () => {
+  if (!selectedImageFile) return;
+  setIsLoading(true);
+  setAnalysis(null);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", selectedImageFile);
+  try {
+    const formData = new FormData();
+    formData.append("file", selectedImageFile);
 
-      const res = await fetch("http://localhost:8000/mood/analyze-image", {
-        method: "POST",
-        body: formData,
-      });
+    const res = await fetch("http://localhost:8000/mood-service/analyze", {
+      method: "POST",
+      body: formData,
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (data.result) {
-        const lines = data.result.split("\n").filter(Boolean);
-        setAnalysis({
-          mood: lines[0] || "Unknown 🤔",
-          activities: lines.slice(1).length
-            ? lines.slice(1)
-            : ["No suggestions available."],
-        });
-      } else {
-        setAnalysis({
-          mood: "Unknown 🤔",
-          activities: ["Try again later."],
-        });
-      }
-    } catch (error) {
+    if (data.result) {
       setAnalysis({
-        mood: "Error ❌",
-        activities: ["Could not connect to backend."],
+        mood: data.result.mood || "Unknown 🤔",
+        activities: data.result.activities?.length
+          ? data.result.activities
+          : ["No suggestions available."],
+      });
+    } else {
+      setAnalysis({
+        mood: "Unknown 🤔",
+        activities: ["Try again later."],
       });
     }
+  } catch (error) {
+    setAnalysis({
+      mood: "Error ❌",
+      activities: ["Could not connect to backend."],
+    });
+  }
 
-    setIsLoading(false);
-  };
+  setIsLoading(false);
+};
+
 
   return (
     <div className="mood-mirror-container">
@@ -123,52 +124,51 @@ function MoodMirror() {
             onClick={handleAnalyze}
             disabled={!selectedImage || isLoading}
           >
-            {isLoading ? (
-              "Analyzing..."
-            ) : (
+            {isLoading ? "Analyzing..." : (
               <>
                 <Sparkles size={20} style={{ marginRight: "8px" }} /> Analyze Mood
               </>
             )}
           </button>
         </div>
+
         {/* Analysis Card */}
-<div className="mood-mirror-card">
-  <h2>2. Mood Analysis</h2>
-  <p className="mood-mirror-note">Here's what the AI detected.</p>
+        <div className="mood-mirror-card">
+          <h2>2. Mood Analysis</h2>
+          <p className="mood-mirror-note">Here's what the AI detected.</p>
 
-  <div className="analysis-section">
-    {isLoading ? (
-      <p>⏳ Analyzing...</p>
-    ) : analysis ? (
-      <div>
-        <div className="detected-mood">
-          <div className="detected-mood-title-container">
-            <Sparkles size={20} />
-            <h3 className="detected-mood-title">Detected Mood</h3>
+          <div className="analysis-section">
+            {isLoading ? (
+              <div className="loader-container">
+                <div className="spinner"></div>
+                <p className="loader-text">Analyzing your mood...</p>
+              </div>
+            ) : analysis ? (
+              <div>
+                <div className="detected-mood">
+                  <div className="detected-mood-title-container">
+                    <Sparkles size={20} />
+                    <h3 className="detected-mood-title">Detected Mood</h3>
+                  </div>
+                  <span className="mood-tag">{analysis.mood}</span>
+                </div>
+                <div className="suggested-activities">
+                  <div className="suggested-activities-title-container">
+                    <Activity size={20} />
+                    <h3 className="suggested-activities-title">Suggested Activities</h3>
+                  </div>
+                  <ul>
+                    {analysis.activities.map((activity, index) => (
+                      <li key={index}>{activity}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <p className="placeholder-text">Your analysis will appear here.</p>
+            )}
           </div>
-          <span className="mood-tag">{analysis.mood}</span>
         </div>
-        <div className="suggested-activities">
-          <div className="suggested-activities-title-container">
-            <Activity size={20} />
-            <h3 className="suggested-activities-title">Suggested Activities</h3>
-          </div>
-          <ul>
-            {analysis.activities.map((activity, index) => (
-              <li key={index}>{activity}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    ) : null}
-
-    {!isLoading && !analysis && (
-      <p className="placeholder-text">Your analysis will appear here.</p>
-    )}
-  </div>
-</div>
-
       </div>
     </div>
   );

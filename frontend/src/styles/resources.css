@@ -1,142 +1,143 @@
-/* === Forum Container === */
-.forum-container {
-  padding: 24px;
-  max-width: 800px;
-  margin: 0 auto;
-  font-family: 'Inter', sans-serif;
+.resources-page {
+  padding: 2rem;
+  font-family: 'DM Sans', sans-serif;
 }
 
-/* Header */
-.forum-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.forum-title {
-  font-size: 26px;
+.resources-title {
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #111827;
+  margin-bottom: 0.3rem;
+  color: #2e2e2e;
 }
 
-.forum-subtitle {
-  font-size: 15px;
+.resources-subtitle {
+  font-size: 0.95rem;
   color: #6b7280;
+  margin-bottom: 1.5rem;
 }
 
-/* Create Post Button */
-.create-post-btn {
-  background: #8b5cf6;
-  color: white;
-  border: none;
-  padding: 10px 16px;
+/* Search bar */
+.search-bar {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.create-post-btn:hover {
-  background: #7c3aed;
-  transform: translateY(-1px);
-}
-
-/* Guidelines Card */
-.guidelines-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  font-size: 0.95rem;
   background: #f9fafb;
-  padding: 14px 18px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 22px;
-  font-size: 14px;
-  line-height: 1.4;
 }
 
-.guidelines-icon {
-  color: #6b7280;
-  flex-shrink: 0;
+/* Grid */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
 }
 
-/* Post Card */
-.post-card {
-  display: flex;
-  gap: 14px;
+/* Resource Card */
+.resource-card {
   background: #fff;
-  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
-.post-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+.resource-card:hover {
+  transform: translateY(-4px);
 }
 
-.post-avatar {
-  width: 40px;
-  height: 40px;
-  background: #f3f4f6;
-  border-radius: 50%;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #374151;
+.resource-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.resource-content {
+  padding: 1rem;
+}
+
+.resource-content h3 {
+  font-size: 1.1rem;
   font-weight: 600;
-}
-
-.post-content {
-  flex: 1;
-}
-
-.post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.post-time {
-  color: #9ca3af;
-  font-size: 12px;
-}
-
-.post-text {
-  font-size: 15px;
-  margin: 6px 0 10px;
+  margin-bottom: 0.3rem;
   color: #111827;
-  line-height: 1.5;
 }
 
-.post-actions {
-  display: flex;
-  gap: 20px;
-  font-size: 13px;
+.resource-content p {
+  font-size: 0.9rem;
   color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+}
+
+.badge-article {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.badge-podcast {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.badge-guide {
+  background: #fef9c3;
+  color: #b45309;
+}
+
+.badge-video {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* Explore link */
+.explore-link {
+  color: #7c3aed;
   font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
 }
 
-.post-actions span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: color 0.2s;
+.explore-link:hover {
+  text-decoration: underline;
 }
 
-.post-actions span:hover {
-  color: #4f46e5;
+.resource-detail {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.resource-detail img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #7c3aed;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
 }

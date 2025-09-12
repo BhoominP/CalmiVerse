@@ -5,6 +5,7 @@ import "../styles/Dashboard.css";
 import WellbeingSnapshot from "../components/WellbeingSnapshot";
 import PointsTasks from "../components/PointsTasks";
 import AIFirstAid from "../components/AIFirstAid";
+
 function Dashboard() {
   return (
     <div className="dashboard-container">

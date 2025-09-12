@@ -2,37 +2,46 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/screening.css";
 import CalmiVerseLogo from "../assets/icons/CalmiVerse.svg";
+import { auth } from "../firebase";   // 👈 MOVE HERE
 
 function Screening() {
   const [step, setStep] = useState(1);
   const [sleepHours, setSleepHours] = useState(8);
 
-
   const [basicDetails, setBasicDetails] = useState({
   name: "",
-  age: "",
+  year: "",   // ✅ correct
   course: "",
   description: "",
   hobbies: []
 });
 
-const [challenges, setChallenges] = useState([]);
 
 
-  // === Step 4 states ===
+  const [challenges, setChallenges] = useState([]);
+  const [supportStyle, setSupportStyle] = useState("");
   const [capturedImage, setCapturedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-const [analysis, setAnalysis] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
 
+  const [sosContacts, setSosContacts] = useState([{ name: "", relation: "", contact: "" }]);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
   const navigate = useNavigate();
 
   const nextStep = () => setStep((prev) => prev + 1);
-  const prevStep = () => setStep((prev) => prev - 1);
+  const prevStep = () => setStep((prev) => prev - 1);  
+  const [psychologyAnswers, setPsychologyAnswers] = useState({
+  q1: "",
+  q2: "",
+  q3: "",
+  q4: "",
+  q5: "",
+  q6: "",
+});
 
+  
   // === Webcam Controls ===
   const startCamera = async () => {
     try {
@@ -54,71 +63,104 @@ const [analysis, setAnalysis] = useState(null);
     }
   };
 
-  const [sosContacts, setSosContacts] = useState([{ name: "", relation: "", contact: "" }]);
-
-const handleSOSChange = (index, field, value) => {
-  const updated = [...sosContacts];
-  updated[index][field] = value;
-  setSosContacts(updated);
-};
-
-const addSOSContact = () => {
-  if (sosContacts.length < 3) {
-    setSosContacts([...sosContacts, { name: "", relation: "", contact: "" }]);
+  const stopCamera = () => {
+  if (videoRef.current?.srcObject) {
+    videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+    videoRef.current.srcObject = null;
   }
 };
-const removeSOSContact = (index) => {
-  const updated = sosContacts.filter((_, i) => i !== index);
-  setSosContacts(updated);
-};
 
-///results
+const calculateScore = () => {
+  let score = 0;
 
-const result = {
-  name: basicDetails.name,
-  course: basicDetails.course,
-  year: basicDetails.age,
-  hobbies: basicDetails.hobbies,
-  description: basicDetails.description,
-  challenges,
-  sleepHours,
-  mood: analysis?.mood || "Not analyzed",
-  moodSuggestions: analysis?.suggestions || [],
-  sosContacts,
-  overall: "Moderate Stress", // ✅ backend could also calculate this
-  timestamp: new Date().toISOString(),
+  // Map Likert scale → numeric
+  const scaleMap = { Never: 0, Sometimes: 1, Often: 2, Always: 3 };
+
+  score += scaleMap[psychologyAnswers.q1] || 0;
+  score += scaleMap[psychologyAnswers.q2] || 0;
+  score += scaleMap[psychologyAnswers.q3] || 0;
+  score += scaleMap[psychologyAnswers.q4] || 0;
+
+  // Q5 & Q6 are Yes/No style
+  if (psychologyAnswers.q5 === "No") score += 1;
+  if (psychologyAnswers.q6 === "No") score += 1;
+
+  return score;
 };
 
 
-const handleFinish = async () => {
-  const result = {
-    name: basicDetails.name,
-    course: basicDetails.course,
-    year: basicDetails.age,
-    hobbies: basicDetails.hobbies,
-    description: basicDetails.description,
-    challenges,
-    sleepHours,
-    mood: analysis?.mood || "Not analyzed",
-    moodSuggestions: analysis?.suggestions || [],
-    sosContacts,
-    overall: "Moderate Stress", // placeholder
-    timestamp: new Date().toISOString(),
+
+  // === SOS Handlers ===
+  const handleSOSChange = (index, field, value) => {
+    const updated = [...sosContacts];
+    updated[index][field] = value;
+    setSosContacts(updated);
   };
 
-  try {
-    await fetch("http://localhost:8000/api/screening/save", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(result),
-});
+  const addSOSContact = () => {
+    if (sosContacts.length < 3) {
+      setSosContacts([...sosContacts, { name: "", relation: "", contact: "" }]);
+    }
+  };
 
-    navigate("/"); // Dashboard
-  } catch (err) {
-    console.error("Error saving result:", err);
+  const removeSOSContact = (index) => {
+    const updated = sosContacts.filter((_, i) => i !== index);
+    setSosContacts(updated);
+  };
+
+
+  
+
+// === Save Function ===
+const handleFinish = async () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Please log in before finishing the screening");
+    return false;
   }
+
+  const payload = {
+  firebase_uid: user.uid,
+  email: user.email,
+  mood: analysis?.mood || null,
+  score: calculateScore(),
+  overall: null, // or derive from answers if needed
+  challenges,
+  sleep_hours: sleepHours,
+  support_style: supportStyle,
+  name: basicDetails.name,
+  year: basicDetails.year,
+  course: basicDetails.course,
+  hobbies: basicDetails.hobbies,
+  sos_contacts: sosContacts,
 };
 
+
+
+  try {
+    console.log("📤 Sending payload:", payload);
+
+    const res = await fetch("http://127.0.0.1:8000/api/screening/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),       // 👈 FIXED here
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || "Failed to save screening result");
+    }
+
+    const data = await res.json();
+    console.log("✅ Saved result:", data);
+    return true;
+  } catch (err) {
+    console.error("❌ Error saving:", err);
+    alert("Error saving screening data");
+    return false;
+  }
+};
 
 
 
@@ -158,9 +200,9 @@ const handleFinish = async () => {
         <input
           type="text"
           placeholder="e.g., 2nd Year"
-          value={basicDetails.age}
+          value={basicDetails.year}
           onChange={(e) =>
-            setBasicDetails({ ...basicDetails, age: e.target.value })
+            setBasicDetails({ ...basicDetails, year: e.target.value })
           }
         />
       </div>
@@ -238,21 +280,113 @@ const handleFinish = async () => {
 
     {/* Challenges */}
     <div className="question-block">
-      <label className="form-label">
-        What challenges do you face most as a student?
-      </label>
-      <div className="checkbox-grid">
-        <label><input type="checkbox" /> Exam stress</label>
-        <label><input type="checkbox" /> Time management</label>
-        <label><input type="checkbox" /> Sleep issues</label>
-        <label><input type="checkbox" /> Peer pressure</label>
-        <label><input type="checkbox" /> Career anxiety</label>
-        <label>
-          <input type="checkbox" /> Other: 
-          <input type="text" className="inline-input" placeholder="Please specify" />
-        </label>
-      </div>
-    </div>
+  <label className="form-label">
+    What challenges do you face most as a student?
+  </label>
+  <div className="checkbox-grid">
+
+    {/* Exam stress */}
+    <label>
+      <input
+        type="checkbox"
+        checked={challenges.includes("Exam stress")}
+        onChange={(e) =>
+          e.target.checked
+            ? setChallenges([...challenges, "Exam stress"])
+            : setChallenges(challenges.filter((c) => c !== "Exam stress"))
+        }
+      />
+      Exam stress
+    </label>
+
+    {/* Time management */}
+    <label>
+      <input
+        type="checkbox"
+        checked={challenges.includes("Time management")}
+        onChange={(e) =>
+          e.target.checked
+            ? setChallenges([...challenges, "Time management"])
+            : setChallenges(challenges.filter((c) => c !== "Time management"))
+        }
+      />
+      Time management
+    </label>
+
+    {/* Sleep issues */}
+    <label>
+      <input
+        type="checkbox"
+        checked={challenges.includes("Sleep issues")}
+        onChange={(e) =>
+          e.target.checked
+            ? setChallenges([...challenges, "Sleep issues"])
+            : setChallenges(challenges.filter((c) => c !== "Sleep issues"))
+        }
+      />
+      Sleep issues
+    </label>
+
+    {/* Peer pressure */}
+    <label>
+      <input
+        type="checkbox"
+        checked={challenges.includes("Peer pressure")}
+        onChange={(e) =>
+          e.target.checked
+            ? setChallenges([...challenges, "Peer pressure"])
+            : setChallenges(challenges.filter((c) => c !== "Peer pressure"))
+        }
+      />
+      Peer pressure
+    </label>
+
+    {/* Career anxiety */}
+    <label>
+      <input
+        type="checkbox"
+        checked={challenges.includes("Career anxiety")}
+        onChange={(e) =>
+          e.target.checked
+            ? setChallenges([...challenges, "Career anxiety"])
+            : setChallenges(challenges.filter((c) => c !== "Career anxiety"))
+        }
+      />
+      Career anxiety
+    </label>
+
+    {/* Other */}
+    <label>
+      <input
+        type="checkbox"
+        checked={challenges.some((c) => c.startsWith("Other:"))}
+        onChange={(e) => {
+          if (!e.target.checked) {
+            setChallenges(challenges.filter((c) => !c.startsWith("Other:")));
+          }
+        }}
+      />
+      Other:{" "}
+      <input
+        type="text"
+        className="inline-input"
+        placeholder="Please specify"
+        value={
+          challenges.find((c) => c.startsWith("Other:"))?.replace("Other: ", "") || ""
+        }
+        onChange={(e) => {
+          const otherValue = `Other: ${e.target.value}`;
+          setChallenges([
+            ...challenges.filter((c) => !c.startsWith("Other:")),
+            otherValue,
+          ]);
+        }}
+      />
+    </label>
+
+  </div>
+</div>
+
 
     {/* Sleep Hours */}
     <div className="question-block">
@@ -266,7 +400,7 @@ const handleFinish = async () => {
           max="12"
           step="1"
           value={sleepHours}
-          onChange={(e) => setSleepHours(e.target.value)}
+          onChange={(e) => setSleepHours(Number(e.target.value))}
           className="slider"
         />
         <span className="slider-value">{sleepHours} hours</span>
@@ -274,15 +408,54 @@ const handleFinish = async () => {
     </div>
 
     {/* Support Style */}
-    <div className="question-block">
-      <label className="form-label">Preferred Support Style:</label>
-      <div className="radio-grid">
-        <label><input type="radio" name="support" /> Self–help guides</label>
-        <label><input type="radio" name="support" /> Peer discussions</label>
-        <label><input type="radio" name="support" /> Professional counseling</label>
-        <label><input type="radio" name="support" /> AI chatbot</label>
-      </div>
-    </div>
+<div className="question-block">
+  <label className="form-label">Preferred Support Style:</label>
+  <div className="radio-grid">
+    <label>
+      <input
+        type="radio"
+        name="support"
+        value="Self–help guides"
+        checked={supportStyle === "Self–help guides"}
+        onChange={(e) => setSupportStyle(e.target.value)}
+      /> 
+      Self–help guides
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="support"
+        value="Peer discussions"
+        checked={supportStyle === "Peer discussions"}
+        onChange={(e) => setSupportStyle(e.target.value)}
+      /> 
+      Peer discussions
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="support"
+        value="Professional counseling"
+        checked={supportStyle === "Professional counseling"}
+        onChange={(e) => setSupportStyle(e.target.value)}
+      /> 
+      Professional counseling
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="support"
+        value="AI chatbot"
+        checked={supportStyle === "AI chatbot"}
+        onChange={(e) => setSupportStyle(e.target.value)}
+      /> 
+      AI chatbot
+    </label>
+  </div>
+</div>
 
     {/* Navigation */}
     <div className="actions">
@@ -292,83 +465,153 @@ const handleFinish = async () => {
   </div>
 )}
 
-      {/* === Step 3 === */}
+{/* === Step 3 === */}
 {step === 3 && (
   <div className="screening-card">
     <h2>Step 3: Psychology & Behavior</h2>
     <p>Your answers are confidential and help us understand your needs.</p>
 
+    {/* Q1 */}
     <div className="question-block">
       <label className="form-label">
         In the past 2 weeks, how often have you felt little interest or pleasure in doing things?
       </label>
       <div className="radio-options">
-        <label><input type="radio" name="q1" /> Never</label>
-        <label><input type="radio" name="q1" /> Sometimes</label>
-        <label><input type="radio" name="q1" /> Often</label>
-        <label><input type="radio" name="q1" /> Always</label>
+        {["Never", "Sometimes", "Often", "Always"].map((opt) => (
+          <label key={opt}>
+            <input
+              type="radio"
+              name="q1"
+              value={opt}
+              checked={psychologyAnswers.q1 === opt}
+              onChange={(e) =>
+                setPsychologyAnswers({ ...psychologyAnswers, q1: e.target.value })
+              }
+            />
+            {opt}
+          </label>
+        ))}
       </div>
     </div>
 
+    {/* Q2 */}
     <div className="question-block">
       <label className="form-label">
         In the past 2 weeks, how often have you felt down, depressed, or hopeless?
       </label>
       <div className="radio-options">
-        <label><input type="radio" name="q2" /> Never</label>
-        <label><input type="radio" name="q2" /> Sometimes</label>
-        <label><input type="radio" name="q2" /> Often</label>
-        <label><input type="radio" name="q2" /> Always</label>
+        {["Never", "Sometimes", "Often", "Always"].map((opt) => (
+          <label key={opt}>
+            <input
+              type="radio"
+              name="q2"
+              value={opt}
+              checked={psychologyAnswers.q2 === opt}
+              onChange={(e) =>
+                setPsychologyAnswers({ ...psychologyAnswers, q2: e.target.value })
+              }
+            />
+            {opt}
+          </label>
+        ))}
       </div>
     </div>
 
+    {/* Q3 */}
     <div className="question-block">
       <label className="form-label">
         How often do you feel nervous, anxious, or on edge?
       </label>
       <div className="radio-options">
-        <label><input type="radio" name="q3" /> Never</label>
-        <label><input type="radio" name="q3" /> Sometimes</label>
-        <label><input type="radio" name="q3" /> Often</label>
-        <label><input type="radio" name="q3" /> Always</label>
+        {["Never", "Sometimes", "Often", "Always"].map((opt) => (
+          <label key={opt}>
+            <input
+              type="radio"
+              name="q3"
+              value={opt}
+              checked={psychologyAnswers.q3 === opt}
+              onChange={(e) =>
+                setPsychologyAnswers({ ...psychologyAnswers, q3: e.target.value })
+              }
+            />
+            {opt}
+          </label>
+        ))}
       </div>
     </div>
 
+    {/* Q4 */}
     <div className="question-block">
       <label className="form-label">
         How often do you have trouble controlling your worries?
       </label>
       <div className="radio-options">
-        <label><input type="radio" name="q4" /> Never</label>
-        <label><input type="radio" name="q4" /> Sometimes</label>
-        <label><input type="radio" name="q4" /> Often</label>
-        <label><input type="radio" name="q4" /> Always</label>
+        {["Never", "Sometimes", "Often", "Always"].map((opt) => (
+          <label key={opt}>
+            <input
+              type="radio"
+              name="q4"
+              value={opt}
+              checked={psychologyAnswers.q4 === opt}
+              onChange={(e) =>
+                setPsychologyAnswers({ ...psychologyAnswers, q4: e.target.value })
+              }
+            />
+            {opt}
+          </label>
+        ))}
       </div>
     </div>
 
+    {/* Q5 */}
     <div className="question-block">
       <label className="form-label">Do you exercise regularly?</label>
       <div className="radio-options">
-        <label><input type="radio" name="q5" /> Yes</label>
-        <label><input type="radio" name="q5" /> No</label>
+        {["Yes", "No"].map((opt) => (
+          <label key={opt}>
+            <input
+              type="radio"
+              name="q5"
+              value={opt}
+              checked={psychologyAnswers.q5 === opt}
+              onChange={(e) =>
+                setPsychologyAnswers({ ...psychologyAnswers, q5: e.target.value })
+              }
+            />
+            {opt}
+          </label>
+        ))}
       </div>
     </div>
 
+    {/* Q6 */}
     <div className="question-block">
       <label className="form-label">Do you meditate/journal?</label>
       <div className="radio-options">
-        <label><input type="radio" name="q6" /> Yes</label>
-        <label><input type="radio" name="q6" /> No</label>
-        <label><input type="radio" name="q6" /> Occasionally</label>
+        {["Yes", "No", "Occasionally"].map((opt) => (
+          <label key={opt}>
+            <input
+              type="radio"
+              name="q6"
+              value={opt}
+              checked={psychologyAnswers.q6 === opt}
+              onChange={(e) =>
+                setPsychologyAnswers({ ...psychologyAnswers, q6: e.target.value })
+              }
+            />
+            {opt}
+          </label>
+        ))}
       </div>
     </div>
 
-  <div className="actions">
-            <button className="back-btn" onClick={prevStep}>← Back</button>
-            <button className="next-btn" onClick={nextStep}>Next Step →</button>
-          </div>
-        </div>
-      )}
+    <div className="actions">
+      <button className="back-btn" onClick={prevStep}>← Back</button>
+      <button className="next-btn" onClick={nextStep}>Next Step →</button>
+    </div>
+  </div>
+)}
+
 
     {/* === Step 4: AI Mood Mirror === */}
       {step === 4 && (
@@ -607,7 +850,7 @@ const handleFinish = async () => {
     <div className="review-box">
       <h4>Basic Details</h4>
       <p><strong>Name:</strong> {basicDetails?.name || "Not provided"}</p>
-      <p><strong>Age/Year:</strong> {basicDetails?.age || "Not provided"}</p>
+      <p><strong>Age/Year:</strong> {basicDetails?.year || "Not provided"}</p>
       <p><strong>Course:</strong> {basicDetails?.course || "Not provided"}</p>
     </div>
 
@@ -667,11 +910,16 @@ const handleFinish = async () => {
     </p>
 
     <button
-      className="finish-btn"
-      onClick={() => navigate("/")}
-    >
-      Go to Dashboard
-    </button>
+  className="finish-btn"
+  onClick={async () => {
+    const success = await handleFinish();   // returns true/false
+    if (success) {
+      navigate("/");  // redirect only if save worked
+    }
+  }}
+>
+  Go to Dashboard
+</button>
   </div>
 )}
 
