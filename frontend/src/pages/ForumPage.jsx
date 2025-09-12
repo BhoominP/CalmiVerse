@@ -1,14 +1,34 @@
+"use client";
 import React, { useState } from "react";
-import "../styles/forum.css";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useToast } from "@/hooks/useToast";
+import { MessageSquare, Heart, Trash2, Reply } from "lucide-react";
 
-function ForumPage() {
+// ------------------------------
+// Mock moderation (replace later)
+// ------------------------------
+async function moderatePost({ text }) {
+  // Fake logic: flag if text has "bad" in it
+  if (text.toLowerCase().includes("bad")) {
+    return { isHarmful: true, reason: "Contains inappropriate language" };
+  }
+  return { isHarmful: false, reason: "" };
+}
+
+export default function ForumPage() {
+  const { toast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [newPost, setNewPost] = useState("");
   const [newComment, setNewComment] = useState("");
   const [replyText, setReplyText] = useState("");
-  const [replyingTo, setReplyingTo] = useState(null); // comment ID being replied to
+  const [replyingTo, setReplyingTo] = useState(null);
 
   const [posts, setPosts] = useState([
     {
@@ -32,8 +52,19 @@ function ForumPage() {
   ]);
 
   // === Create Post ===
-  const handleCreatePost = () => {
+  const handleCreatePost = async () => {
     if (!newPost.trim()) return;
+
+    const moderationResult = await moderatePost({ text: newPost });
+    if (moderationResult.isHarmful) {
+      toast({
+        variant: "destructive",
+        title: "Post Flagged",
+        description: `Reason: ${moderationResult.reason}`,
+      });
+      return;
+    }
+
     const newEntry = {
       id: Date.now(),
       user: `Student #${Math.floor(Math.random() * 999)}`,
@@ -46,15 +77,12 @@ function ForumPage() {
     setPosts([newEntry, ...posts]);
     setNewPost("");
     setIsModalOpen(false);
+    toast({ title: "Post Created", description: "Your post was added." });
   };
 
   // === Like Post ===
   const handleLike = (id) => {
-    setPosts(
-      posts.map((post) =>
-        post.id === id ? { ...post, likes: post.likes + 1 } : post
-      )
-    );
+    setPosts(posts.map((p) => (p.id === id ? { ...p, likes: p.likes + 1 } : p)));
   };
 
   // === Open Comment Modal ===
@@ -67,8 +95,19 @@ function ForumPage() {
   };
 
   // === Add Comment ===
-  const handleAddComment = () => {
-    if (!newComment.trim()) return;
+  const handleAddComment = async () => {
+    if (!newComment.trim() || !selectedPost) return;
+
+    const moderationResult = await moderatePost({ text: newComment });
+    if (moderationResult.isHarmful) {
+      toast({
+        variant: "destructive",
+        title: "Comment Flagged",
+        description: `Reason: ${moderationResult.reason}`,
+      });
+      return;
+    }
+
     setPosts(
       posts.map((post) =>
         post.id === selectedPost.id
@@ -89,11 +128,23 @@ function ForumPage() {
       )
     );
     setNewComment("");
+    toast({ title: "Comment Added", description: "Your comment was added." });
   };
 
   // === Add Reply ===
-  const handleAddReply = (commentId) => {
-    if (!replyText.trim()) return;
+  const handleAddReply = async (commentId) => {
+    if (!replyText.trim() || !selectedPost) return;
+
+    const moderationResult = await moderatePost({ text: replyText });
+    if (moderationResult.isHarmful) {
+      toast({
+        variant: "destructive",
+        title: "Reply Flagged",
+        description: `Reason: ${moderationResult.reason}`,
+      });
+      return;
+    }
+
     setPosts(
       posts.map((post) =>
         post.id === selectedPost.id
@@ -120,175 +171,156 @@ function ForumPage() {
     );
     setReplyText("");
     setReplyingTo(null);
+    toast({ title: "Reply Added", description: "Your reply was added." });
   };
 
   // === Delete Post ===
   const handleDelete = (id) => {
-    setPosts(posts.filter((post) => post.id !== id));
+    setPosts(posts.filter((p) => p.id !== id));
+    toast({ title: "Post Deleted", description: "The post was removed." });
   };
 
   return (
-    <div className="forum-container">
+    <div className="max-w-3xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="forum-header">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="forum-title">Peer Support Forum</h1>
-          <p className="forum-subtitle">
+          <h1 className="text-2xl font-bold">Peer Support Forum</h1>
+          <p className="text-muted-foreground">
             An anonymous space to share and connect with fellow students.
           </p>
         </div>
-        <button
-          className="create-post-btn"
-          onClick={() => setIsModalOpen(true)}
-        >
-          + Create Post
-        </button>
+        <Button onClick={() => setIsModalOpen(true)}>+ Create Post</Button>
       </div>
 
       {/* Guidelines */}
-      <div className="guidelines-card">
-        <span className="guidelines-icon">⚠️</span>
-        <p>
-          <strong>Community Guidelines</strong> <br />
-          This is a safe and supportive space. Please be respectful. Posts are
-          moderated by AI to ensure safety.
-        </p>
-      </div>
+      <Alert>
+        <AlertTitle>Community Guidelines</AlertTitle>
+        <AlertDescription>
+          This is a safe and supportive space. Please be respectful. Posts,
+          comments, and replies are moderated by AI.
+        </AlertDescription>
+      </Alert>
 
       {/* Posts */}
       {posts.map((post) => (
-        <div key={post.id} className="post-card">
-          <div className="post-avatar">{post.user.charAt(0)}</div>
-          <div className="post-content">
-            <div className="post-header">
-              <span>{post.user}</span>
-              <span className="post-time">{post.time}</span>
+        <Card key={post.id}>
+          <CardContent className="p-4 flex gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+              {post.user.charAt(0)}
             </div>
-            <p className="post-text">{post.text}</p>
-            <div className="post-actions">
-              <span onClick={() => handleLike(post.id)} className="action-btn">
-                ❤️ {post.likes}
-              </span>
-              <span
-                onClick={() => handleOpenComments(post)}
-                className="action-btn"
-              >
-                💬 {post.comments} Comments
-              </span>
-              <span
-                onClick={() => handleDelete(post.id)}
-                className="delete-btn"
-              >
-                🗑️ Delete
-              </span>
+            <div className="flex-1">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold">{post.user}</span>
+                <span className="text-sm text-muted-foreground">
+                  {post.time}
+                </span>
+              </div>
+              <p className="mt-2">{post.text}</p>
+              <div className="flex gap-4 mt-3 text-sm">
+                <button
+                  onClick={() => handleLike(post.id)}
+                  className="flex items-center gap-1 hover:text-primary"
+                >
+                  <Heart size={16} /> {post.likes}
+                </button>
+                <button
+                  onClick={() => handleOpenComments(post)}
+                  className="flex items-center gap-1 hover:text-primary"
+                >
+                  <MessageSquare size={16} /> {post.comments} Comments
+                </button>
+                <button
+                  onClick={() => handleDelete(post.id)}
+                  className="flex items-center gap-1 text-red-500"
+                >
+                  <Trash2 size={16} /> Delete
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       ))}
 
       {/* Create Post Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2 className="modal-title">Create a Post</h2>
-            <textarea
-              className="modal-textarea"
-              placeholder="What's on your mind?"
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-            />
-            <div className="modal-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button className="submit-btn" onClick={handleCreatePost}>
-                Post
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create a Post</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            placeholder="What's on your mind?"
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
+          />
+          <Button onClick={handleCreatePost} className="mt-3">
+            Post
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       {/* Comments Modal */}
-      {isCommentModalOpen && selectedPost && (
-        <div className="modal-overlay">
-          <div className="modal comments-modal">
-            <h2 className="modal-title">Comments for {selectedPost.user}</h2>
+      <Dialog open={isCommentModalOpen} onOpenChange={setIsCommentModalOpen}>
+        <DialogContent className="max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Comments for {selectedPost?.user}</DialogTitle>
+          </DialogHeader>
 
-            <div className="comments-list">
-              {selectedPost.commentList.length > 0 ? (
-                selectedPost.commentList.map((c) => (
-                  <div key={c.id} className="comment-item">
-                    <strong>{c.user}:</strong> {c.text}
-                    <div className="comment-actions">
-                      <span
-                        className="reply-btn"
-                        onClick={() => setReplyingTo(c.id)}
-                      >
-                        ↩ Reply
-                      </span>
-                    </div>
+          {selectedPost?.commentList.length > 0 ? (
+            selectedPost.commentList.map((c) => (
+              <div key={c.id} className="border-b pb-2 mb-2">
+                <p>
+                  <strong>{c.user}:</strong> {c.text}
+                </p>
+                <button
+                  className="text-xs text-primary flex items-center gap-1 mt-1"
+                  onClick={() => setReplyingTo(c.id)}
+                >
+                  <Reply size={12} /> Reply
+                </button>
 
-                    {/* Replies */}
-                    {c.replies.length > 0 && (
-                      <div className="replies-list">
-                        {c.replies.map((r) => (
-                          <div key={r.id} className="reply-item">
-                            <strong>{r.user}:</strong> {r.text}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Reply Box */}
-                    {replyingTo === c.id && (
-                      <div className="reply-box">
-                        <textarea
-                          className="reply-input"
-                          placeholder="Write a reply..."
-                          value={replyText}
-                          onChange={(e) => setReplyText(e.target.value)}
-                        />
-                        <button
-                          className="submit-btn"
-                          onClick={() => handleAddReply(c.id)}
-                        >
-                          Reply
-                        </button>
-                      </div>
-                    )}
+                {/* Replies */}
+                {c.replies.length > 0 && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    {c.replies.map((r) => (
+                      <p key={r.id} className="text-sm">
+                        <strong>{r.user}:</strong> {r.text}
+                      </p>
+                    ))}
                   </div>
-                ))
-              ) : (
-                <p className="no-comments">No comments yet. Be the first!</p>
-              )}
-            </div>
+                )}
 
-            <textarea
-              className="modal-textarea"
-              placeholder="Write a comment..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <div className="modal-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => setIsCommentModalOpen(false)}
-              >
-                Close
-              </button>
-              <button className="submit-btn" onClick={handleAddComment}>
-                Add Comment
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                {/* Reply Box */}
+                {replyingTo === c.id && (
+                  <div className="mt-2 space-y-2">
+                    <Input
+                      placeholder="Write a reply..."
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                    />
+                    <Button size="sm" onClick={() => handleAddReply(c.id)}>
+                      Reply
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              No comments yet. Be the first!
+            </p>
+          )}
+
+          <Textarea
+            placeholder="Write a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <Button onClick={handleAddComment} className="mt-3">
+            Add Comment
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
-
-export default ForumPage;

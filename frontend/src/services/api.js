@@ -9,7 +9,8 @@ const API = axios.create({
 // -------------------------------
 export const sendMessageToChatbot = async (message) => {
   try {
-    const res = await API.post("/chatbot", { message });
+    // ✅ matches FastAPI route: /api/chatbot/send
+    const res = await API.post("/chatbot/send", { message });
     return res.data;
   } catch (err) {
     console.error("Chatbot API Error:", err);

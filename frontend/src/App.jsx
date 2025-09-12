@@ -11,34 +11,34 @@ import Settings from "./pages/Settings";
 import MoodMirror from "./components/MoodMirror";
 import ResourceDetail from "./pages/ResourceDetail";
 
+import PointsTasks from "./components/PointsTasks";
+import Toaster from "./components/Toaster";
+
 // Auth + Screening
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Screening from "./pages/Screening"; // <- Combined steps
 
-import { ThemeProvider } from './context/ThemeContext';
-import './styles/theme.css';
-
 function AppLayout() {
   const location = useLocation();
 
-  // Hide sidebar on signin, signup, screening
+  // Hide sidebar + header on signin, signup, screening
   const hideSidebarAndHeader = ["/signin", "/signup", "/screening"].some(path =>
     location.pathname.startsWith(path)
   );
 
   return (
-    <div className="app-layout">
+    <div className="flex h-screen">
       {!hideSidebarAndHeader && <Sidebar />}
-      <div className="main-content">
+      <div className="flex flex-col flex-1">
         {!hideSidebarAndHeader && <Header />}
-        <main className="app-content">
+        <main className="flex-1 overflow-y-auto p-4 bg-gray-50">
           <Routes>
             {/* Auth */}
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
 
-            {/* Screening (Step 1 → Step 7) */}
+            {/* Screening */}
             <Route path="/screening" element={<Screening />} />
 
             {/* Main App */}
@@ -50,20 +50,24 @@ function AppLayout() {
             <Route path="/booking" element={<Booking />} />
             <Route path="/sos" element={<SOSCircle />} />
             <Route path="/settings" element={<Settings />} />
+
+            {/* Gamification */}
+            <Route path="/tasks" element={<PointsTasks />} />
           </Routes>
         </main>
       </div>
+
+      {/* Global Toasts */}
+      <Toaster />
     </div>
   );
 }
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <AppLayout />
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <AppLayout />
+    </Router>
   );
 }
 

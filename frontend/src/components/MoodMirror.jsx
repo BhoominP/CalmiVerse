@@ -32,47 +32,45 @@ function MoodMirror() {
     fileInputRef.current.value = ""; // Reset file input
   };
 
-
   // Call backend API
-const handleAnalyze = async () => {
-  if (!selectedImageFile) return;
-  setIsLoading(true);
-  setAnalysis(null);
+  const handleAnalyze = async () => {
+    if (!selectedImageFile) return;
+    setIsLoading(true);
+    setAnalysis(null);
 
-  try {
-    const formData = new FormData();
-    formData.append("file", selectedImageFile);
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedImageFile);
 
-    const res = await fetch("http://localhost:8000/mood-service/analyze", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    if (data.result) {
-      setAnalysis({
-        mood: data.result.mood || "Unknown 🤔",
-        activities: data.result.activities?.length
-          ? data.result.activities
-          : ["No suggestions available."],
+      const res = await fetch("http://localhost:8000/mood-service/analyze", {
+        method: "POST",
+        body: formData,
       });
-    } else {
+
+      const data = await res.json();
+
+      if (data.result) {
+        setAnalysis({
+          mood: data.result.mood || "Unknown 🤔",
+          activities: data.result.activities?.length
+            ? data.result.activities
+            : ["No suggestions available."],
+        });
+      } else {
+        setAnalysis({
+          mood: "Unknown 🤔",
+          activities: ["Try again later."],
+        });
+      }
+    } catch (error) {
       setAnalysis({
-        mood: "Unknown 🤔",
-        activities: ["Try again later."],
+        mood: "Error ❌",
+        activities: ["Could not connect to backend."],
       });
     }
-  } catch (error) {
-    setAnalysis({
-      mood: "Error ❌",
-      activities: ["Could not connect to backend."],
-    });
-  }
 
-  setIsLoading(false);
-};
-
+    setIsLoading(false);
+  };
 
   return (
     <div className="mood-mirror-container">

@@ -17,8 +17,7 @@ function Settings() {
   const [bookingReminders, setBookingReminders] = useState(true);
   const [weeklySummary, setWeeklySummary] = useState(false);
 
-  // Appearance
-  const [darkMode, setDarkMode] = useState(false);
+  
 
   // ✅ Load user data from localStorage on mount
   useEffect(() => {
@@ -160,20 +159,7 @@ function Settings() {
         </div>
       </div>
 
-      {/* Appearance Section */}
-      <div className="settings-card">
-        <h2 className="settings-section-title">🎨 Appearance</h2>
-        <p className="settings-description">Customize the look and feel of the app.</p>
-
-        <div className="settings-toggle">
-          <span>Dark Mode</span>
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={() => setDarkMode(!darkMode)}
-          />
-        </div>
-      </div>
+      
     </div>
   );
 }

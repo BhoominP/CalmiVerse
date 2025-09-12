@@ -37,16 +37,33 @@ async def analyze_mood(file: UploadFile = File(...)):
         model = genai.GenerativeModel("gemini-1.5-flash")
 
         # ✅ Force JSON response
-        prompt = """
-        You are an AI Mood Mirror. 
-        Analyze the face in this image and return strictly valid JSON, no markdown, no extra text. 
-        Format must be:
+        prompt = prompt = """
+You are an AI Mood Mirror. 
+Analyze the face in this image and return strictly valid JSON, no markdown, no extra text. 
+Format must be:
 
-        {
-          "mood": "OneWord",
-          "activities": ["Activity 1", "Activity 2", "Activity 3"]
-        }
-        """
+{
+  "mood": "A short descriptive phrase (1–3 words, e.g. 'Calm', 'Stressed', 'Excited but tired')",
+  "confidence": "High / Medium / Low",
+  "activities": [
+    "Suggestion 1",
+    "Suggestion 2",
+    "Suggestion 3",
+    "Suggestion 4",
+    "Suggestion 5"
+  ]
+}
+
+Rules for activities:
+- Always give exactly 5.
+- Make each suggestion unique and creative (avoid repeating generic advice).
+- Tailor suggestions to the detected mood.
+- Use a friendly, motivational coaching style.
+- Keep each activity one full sentence, clear and supportive.
+- Activities should vary across categories: (1) physical, (2) social, (3) creative, (4) relaxing, (5) self-reflective.
+- Do not include quotation marks inside the text.
+"""
+
 
         response = model.generate_content(
             [prompt, {"mime_type": file.content_type, "data": contents}]

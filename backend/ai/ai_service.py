@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify
 load_dotenv()
 
 # Configure API key (⚠️ don't hardcode the key, use .env instead)
-genai.configure(api_key=os.getenv("AIzaSyCNBPGNYeGj6U2N_TqZpCddwJwFDOFpK9Q"))
+genai.configure(api_key=os.getenv("AIzaSyCBcsdGz9GCaMnFjs7U-iuQ-fpINXMvZHY"))
 
 # Initialize Flask
 app = Flask(__name__)

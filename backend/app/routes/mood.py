@@ -19,15 +19,22 @@ async def analyze_image(file: UploadFile = File(...)):
         model = genai.GenerativeModel("gemini-1.5-flash")
 
         # Prompt Gemini for STRICT JSON output
+        # Prompt Gemini for STRICT JSON output
         prompt = """
-        You are an AI Mood Mirror. Analyze the face in this selfie and return JSON only.
-        JSON format:
-        {
-          "mood": "one-word mood (e.g., Happy, Sad, Neutral, Excited, Stressed)",
-          "suggestions": ["Activity 1", "Activity 2", "Activity 3"]
-        }
-        Do not add any explanation, only valid JSON.
-        """
+You are an AI Mood Mirror. Analyze the face in this selfie and return ONLY valid JSON.
+
+JSON format (no text outside this object):
+{
+  "mood": "one-word mood (Happy, Sad, Stressed, Angry, Tired, Excited, Relaxed, Confused, Neutral, Lonely, Hopeful, Unknown)",
+  "suggestions": ["short activity 1", "short activity 2", "short activity 3"]
+}
+
+Rules:
+- Always output exactly one JSON object.
+- Do not include any explanations, markdown, or text outside the JSON.
+- If no face is detected, return mood: "Unknown" with 3 safe retry suggestions (e.g. "Retake in better lighting", "Adjust camera angle", "Try again").
+"""
+
 
         response = model.generate_content([prompt, image_data])
         text = response.text.strip()

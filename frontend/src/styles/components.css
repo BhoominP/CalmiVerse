@@ -1,8 +1,8 @@
 /* Sidebar Layout */
 .sidebar {
   width: 240px;
-  background: #f9fafb;
-  border-right: 1px solid #e5e7eb;
+  background: var(--sidebar);
+  border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -26,7 +26,7 @@
 .logo-text {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #2e2e2e;
+  color: var(--sidebar-foreground);
 }
 
 /* Sidebar Profile Section */
@@ -42,14 +42,14 @@
   align-items: center;
   justify-content: space-between; /* keeps arrow on the right */
   padding: 0.8rem 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--sidebar-border);
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .sidebar-profile:hover {
-  background: #f3f4f6;
+  background: var(--sidebar-accent);
 }
 
 .profile-avatar {
@@ -70,22 +70,22 @@
 .profile-name {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--neutral-dark);
+  color: var(--sidebar-foreground);
 }
 
 .profile-role {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--sidebar-foreground);
 }
 
 .profile-arrow {
-  color: #9ca3af;
+  color: var(--sidebar-foreground);
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .sidebar-profile:hover .profile-arrow {
   transform: translateX(3px);
-  color: var(--neutral-dark);
+  color: var(--sidebar-foreground);
 }
 
 
@@ -102,7 +102,7 @@
   gap: 8px;
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--sidebar-foreground);
   font-size: 14px;
   font-weight: 500;
   padding: 0.6rem 0.8rem;
@@ -112,8 +112,8 @@
 }
 
 .signout-btn:hover {
-  background: #f3f4f6;
-  color: #ef4444;
+  background: var(--sidebar-accent);
+  color: var(--destructive);
 }
 
 
@@ -131,7 +131,7 @@
   gap: 0.6rem;
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
-  color: #2e2e2e;
+  color: var(--sidebar-foreground);
   font-weight: 500;
   text-decoration: none;
   margin-bottom: 0.4rem;
@@ -139,20 +139,20 @@
 }
 
 .menu-item:hover {
-  background: #f0f0ff;
-  color: #9c88ff;
+  background: var(--sidebar-accent);
+  color: var(--sidebar-primary);
 }
 
 .menu-item.active {
-  background: #eae6ff;
-  color: #9c88ff;
+  background: var(--sidebar-accent);
+  color: var(--sidebar-primary);
   font-weight: 600;
 }
 
 /* Divider */
 .divider {
   border: none;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--sidebar-border);
   margin: 0.5rem 0 1rem 0;
 }
 

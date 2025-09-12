@@ -5,7 +5,6 @@ import "./index.css"; // <-- Tailwind included
 
 // Import your global styles
 import "./styles/globals.css";
-import "./styles/theme.css";
 import "./styles/components.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

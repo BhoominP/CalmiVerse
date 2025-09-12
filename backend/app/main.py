@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
-from app.routes import mood  # your mood router
+from app.routes import chatbot, mood  # your mood router
 from app.services import mood_service
 
 from app.routes import screening  # import your file
@@ -40,6 +40,7 @@ app.add_middleware(
 app.include_router(mood_service.router, prefix="/mood-service", tags=["Mood Mirror"])
 app.include_router(mood.router, prefix="/mood", tags=["Mood"])
 app.include_router(screening.router)
+app.include_router(chatbot.chatbot_bp)
 
 
 # Schema for prompt requests

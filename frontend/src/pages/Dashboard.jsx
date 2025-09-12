@@ -4,6 +4,7 @@ import "../styles/Dashboard.css";
 // Import components
 import WellbeingSnapshot from "../components/WellbeingSnapshot";
 import PointsTasks from "../components/PointsTasks";
+import { Gamification } from "../components/gamification";
 import AIFirstAid from "../components/AIFirstAid";
 
 function Dashboard() {
@@ -17,7 +18,7 @@ function Dashboard() {
       <main className="dashboard-grid">
         <div className="left-column">
           <WellbeingSnapshot />
-          <PointsTasks />
+          <Gamification />
         </div>
         <div className="right-column">
           <AIFirstAid />
