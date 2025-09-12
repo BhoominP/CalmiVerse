@@ -63,7 +63,8 @@ Install Dependencies
 pip install -r requirements.txt
 
 Run Backend
-uvicorn run:app --reload
+uvicorn app.main:app --reload --port 8000
+
 
 
 Backend runs at: http://localhost:8000
